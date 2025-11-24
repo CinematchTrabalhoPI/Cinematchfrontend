@@ -168,7 +168,7 @@ html, body {
 
 .header-movie img {
   border-radius: 8px;
-  height: 75%;
+  height: 70%;
 }
 
 .header-movie h2 {
@@ -222,7 +222,7 @@ html, body {
 }
 
 .movie-card p {
-  font-size: 1rem;
+  font-size: 1.2rem;
   color: #fff;
   margin-top: 6px;
 
