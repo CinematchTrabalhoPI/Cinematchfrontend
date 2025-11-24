@@ -5,7 +5,7 @@
     <!-- Hero -->
     <header class="hero" v-if="topMovie">
       <div class="mainText">
-        <h1>Dê match com o filme perfeito para o seu momento!</h1>
+        <h1>Dê <span class="pink">match</span> com o filme <span class="pink">perfeito</span> para o seu momento!</h1>
         <p>Descubra filmes que combinam com o seu humor. Escolha o mood do dia e deixe o match acontecer.</p>
         <div class="buttons">
           <router-link to="/match" class="btn-primary">Match</router-link>
@@ -18,6 +18,7 @@
         <router-link :to="`/movie/${topMovie.id}`">
           <img :src="`https://image.tmdb.org/t/p/w500${topMovie.poster_path}`" :alt="topMovie.title" />
           <h2>{{ topMovie.title }}</h2>
+          <p>Clique para saber mais</p>
         </router-link>
       </div>
     </header>
@@ -102,70 +103,140 @@ html, body {
   display: flex;
 }
 .mainText{
-    width: 50%
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
 }
-
+.mainText h1 {
+  font-size: 4.1rem;
+}
+.mainText p {
+  font-size: 1.5rem;
+ width: 80%;
+  color: #BDBDBD;
+  line-height: 2.3rem;
+}
 .pink {
-  color: #ff2d74;
+  color: #F94B69;
 }
 
 .buttons {
   margin-top: 20px;
   display: flex;
-  gap: 16px;
+  flex-direction: column;
+  width: 48%;
+  gap: 1.8rem;
 }
 
 .btn-primary {
-  background: linear-gradient(90deg, #ff2d74, #ff7f4f);
+  background: linear-gradient(90deg, #FF8197, #F41C41);
   border: none;
   padding: 12px 30px;
-  border-radius: 10px;
-  color: #fff;
+  border-radius: 30px;
+  color: #0A0B0B;
+  font-size: 1.5rem;
   cursor: pointer;
   font-weight: bold;
+  display: flex;
+  justify-content: center;
 }
 
 .btn-secondary {
   border: 2px solid #ff2d74;
   background: transparent;
   padding: 12px 30px;
-  border-radius: 10px;
+  border-radius: 30px;
   color: #ff2d74;
   cursor: pointer;
+  font-size: 1.5rem;
+    display: flex;
+  justify-content: center;
 }
 
 /* Header movie */
+.header-movie {
+   display: flex;
+   width: 50%;
+   justify-content: center;
+}
+.header-movie a {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
 .header-movie img {
-  width: 200px;
   border-radius: 8px;
-  margin-top: 20px;
+  height: 75%;
 }
 
 .header-movie h2 {
-  margin-top: 10px;
+  font-size: 1.8rem;
 }
-
+.header-movie p {
+  font-size: 1.2rem;
+  color: #BDBDBD;
+}
 /* Grid */
 .popular {
   padding:  40px 100px ;
+  background-color: #212227;
 }
-
+.popular h2 {
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+}
 .movie-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  grid-template-columns: repeat(5, 1fr); /* Sempre 5 colunas */
+  grid-template-rows: repeat(2, auto);   /* Sempre 2 linhas */
   gap: 20px;
   margin-top: 20px;
 }
 
 .movie-card {
-  background: #1e1e1e;
-  padding: 12px;
   border-radius: 10px;
-  text-align: center;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* animação suave */
+  cursor: pointer;
+}
+
+.movie-card:hover {
+  transform: scale(1.05);  /* efeito de zoom */
+}
+
+.movie-card a {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding: 12px;
 }
 
 .movie-card img {
   width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
   border-radius: 8px;
+  transition: transform 0.3s ease;
 }
+
+.movie-card p {
+  font-size: 1rem;
+  color: #fff;
+  margin-top: 6px;
+
+  display: -webkit-box;       /* permite truncamento multilinha */
+  -webkit-line-clamp: 2;      /* limita a 2 linhas */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: all 0.3s ease;
+}
+
+.movie-card:hover p {
+  -webkit-line-clamp: unset;  /* mostra título completo no hover */
+  white-space: normal;
+}
+
 </style>

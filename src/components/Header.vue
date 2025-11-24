@@ -1,28 +1,40 @@
 <template>
   <header class="hero-header">
-    <router-link to="/matches" class="btn-primary">Meus Matches</router-link>
+      <img :src="logo" alt="Logo" class="logo">
+    <router-link to="/meus-matches" class="btn-primary"><img :src="ticket" alt="Ticket Icon" class="icon">Meus Matches</router-link>
   </header>
 </template>
 
-<script setup></script>
+<script setup>
+import ticket from '@/assets/ticket.png'
+import logo from '@/assets/logo.png'
+</script>
+
 
 <style scoped>
 .hero-header {
-  position: fixed;   /* fixa no topo */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 1000;     /* fica acima do conteúdo */
+  z-index: 1000;
   background-color: #121212;
-  padding: 20px 40px;
-  display: flex;
-  justify-content: flex-start;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-  height: 70px;      /* define altura do header */
+  padding: 20px 100px;
+  height: 70px;
 }
-
+.logo {
+  height: 30px;
+}
 .btn-primary {
-  text-decoration: underline;
+  display: flex;
+  align-items: center;
   font-weight: bold;
+}
+.btn-primary .icon {
+  width: 20px;
+  margin-right: 8px;
 }
 </style>
