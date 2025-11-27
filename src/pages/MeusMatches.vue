@@ -1,5 +1,5 @@
 <template>
-  <div class="matches-page">
+  <div class="matches-page popular">
     <button class="btn-back" @click="goBack">← Voltar</button>
 
     <h1>Meus Matches ❤️</h1>
@@ -8,16 +8,13 @@
       Você ainda não adicionou filmes.
     </div>
 
-    <div class="movie-grid">
+    <div class="movie-grid" v-else>
       <div v-for="movie in matches" :key="movie.id" class="movie-card">
         <router-link :to="`/movie/${movie.id}`">
-          <img :src="`https://image.tmdb.org/t/p/w500${movie.poster_path}`" />
+          <img :src="`https://image.tmdb.org/t/p/w500${movie.poster_path}`" :alt="movie.title" />
           <p>{{ movie.title }}</p>
         </router-link>
-
-        <button class="btn-remove" @click="removeMatch(movie.id)">
-          Remover
-        </button>
+        <button class="btn-remove" @click="removeMatch(movie.id)">Remover</button>
       </div>
     </div>
   </div>
@@ -42,86 +39,84 @@ const removeMatch = (id) => {
 };
 </script>
 <style scoped>
-.matches-page {
-  padding: 40px 70px;
-  color: #fff;
-  font-family: Arial, sans-serif;
+.popular {
+  padding: 40px 100px;
 }
 
-/* Botão voltar */
-.btn-back {
-  background: #ff2d74;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  color: white;
-  font-weight: bold;
-  margin-bottom: 20px;
-  transition: 0.2s;
-}
-
-.btn-back:hover {
-  background: #d3235d;
-}
-
-h1 {
-  font-size: 2.2rem;
+.popular h1 {
+  font-size: 2.5rem;
   margin-bottom: 30px;
 }
 
 /* Texto quando vazio */
 .empty {
-  margin-top: 30px;
   text-align: center;
-  opacity: 0.7;
   font-size: 1.1rem;
+  opacity: 0.7;
+  margin-top: 30px;
 }
 
-/* Grade de filmes */
+/* GRID */
 .movie-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 25px;
+  grid-template-columns: repeat(5, 1fr); /* 5 colunas padrão */
+  gap: 20px;
+  margin-top: 20px;
 }
 
-/* Card */
 .movie-card {
-  background: #1a1a1a;
-  padding: 15px;
-  border-radius: 12px;
-  text-align: center;
-  transition: 0.2s;
-  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.3s ease, padding-bottom 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  padding-bottom: 12px; /* espaço para botão */
 }
 
 .movie-card:hover {
-  transform: scale(1.03);
-  border-color: #ff2d74;
+  transform: scale(1.05);
+  padding-bottom: 50px; /* aumenta espaço para botão aparecer */
 }
 
-/* Imagem */
+.movie-card a {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding: 12px;
+}
+
 .movie-card img {
   width: 100%;
-  border-radius: 10px;
-  margin-bottom: 12px;
-  transition: 0.2s;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
 }
 
-.movie-card img:hover {
-  opacity: 0.9;
-}
-
-/* Título */
 .movie-card p {
-  margin: 6px 0 10px;
-  font-size: 1rem;
-  font-weight: bold;
+  font-size: 1.2rem;
+  color: #fff;
+  margin-top: 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* título em 2 linhas */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: all 0.3s ease;
 }
 
-/* Botão remover */
+.movie-card:hover p {
+  -webkit-line-clamp: unset; /* mostra o título inteiro no hover */
+  white-space: normal;
+}
+
+/* Botão remover abaixo do título */
 .btn-remove {
-  width: 100%;
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
   padding: 8px;
   background: #ff2d2d;
   border: none;
@@ -129,10 +124,70 @@ h1 {
   color: white;
   font-weight: bold;
   cursor: pointer;
-  transition: 0.2s;
+  opacity: 0;
+  pointer-events: none;
+  background-image: linear-gradient(to right, #ff2d2d 0%, #ff2d2d 0%, #ff6a6a 0%, #ff2d2d 0%);
+  background-size: 0% 100%;
+  background-repeat: no-repeat;
+  transition: opacity 0.5s ease, background-size 0.5s ease;
+}
+
+.movie-card:hover .btn-remove {
+  opacity: 1;
+  pointer-events: auto;
+  background-size: 100% 100%; /* animação completa */
 }
 
 .btn-remove:hover {
   background: #d21f1f;
 }
+
+/* Botão voltar */
+.btn-back {
+  margin-bottom: 40px;
+  padding: 8px 16px;
+  background: #242424;
+  border: none;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+}
+
+.btn-back:hover {
+  background: #6a6a6a;
+}
+
+/* DESKTOP → 5 COLUNAS */
+@media (min-width: 1200px) {
+  .movie-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+/* TELAS GRANDES → 7 COLUNAS */
+@media (min-width: 1600px) {
+  .movie-grid {
+    grid-template-columns: repeat(7, 1fr);
+  }
+}
+
+/* TABLET */
+@media (max-width: 1024px) {
+  .movie-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* CELULAR */
+@media (max-width: 600px) {
+  .movie-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .popular {
+    padding: 20px;
+  }
+}
+
 </style>

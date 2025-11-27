@@ -3,12 +3,8 @@
     <button class="btn-back" @click="goBack">← Voltar</button>
 
     <div class="movie-header">
-      <img :src="`https://image.tmdb.org/t/p/w500${movie.poster_path}`" :alt="movie.title" />
-
-      <div class="movie-info">
-        <h1>{{ movie.title }} <span>({{ releaseYear }})</span></h1>
-        <p>Nota: {{ movie.vote_average.toFixed(1) }}</p>
-        <p class="overview">{{ movie.overview }}</p>
+      <div class="posterGenres">
+        <img :src="`https://image.tmdb.org/t/p/w500${movie.poster_path}`" :alt="movie.title" />
 
         <!-- GÊNEROS -->
         <div class="genres">
@@ -21,6 +17,18 @@
             {{ genre.name }}
           </router-link>
         </div>
+      </div>
+
+      <div class="movie-info">
+        <h1>{{ movie.title }} <span>({{ releaseYear }})</span></h1>
+
+        <!-- NOTA COM ESTRELA -->
+        <p class="rating">
+          <img :src="star" alt="Star" class="star" />
+          {{ movie.vote_average.toFixed(1) }}
+        </p>
+
+        <p class="overview">{{ movie.overview }}</p>
 
         <!-- ADICIONAR / REMOVER MATCH -->
         <button class="btn-match" @click="toggleMatch">
@@ -35,8 +43,9 @@
   </div>
 </template>
 
-
 <script setup>
+import star from "@/assets/star.png"; // ← AGORA FUNCIONA
+
 import { ref, computed, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
@@ -46,21 +55,22 @@ const router = useRouter();
 
 const movie = ref(null);
 
-// TOKEN CORRETO
+// TOKEN
 const BEARER_TOKEN =
   "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhY2VlNDkxZjA0M2ExODg2ZWNkNWI2ZTkzMDM1NjkzMCIsIm5iZiI6MTc1OTUwOTI5NS43MzgsInN1YiI6IjY4ZGZmYjJmYzIzZmRjZTE5YmI3N2VjOCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.NCkEvmJZlyl49UfX0fVSI76-Yk2dD9tDBKMV3ulA1SI";
 
+// Ano do filme
 const releaseYear = computed(() => movie.value?.release_date?.split("-")[0] || "");
 
-// Carregar matches do localStorage
+// Matches no localStorage
 const matches = ref(JSON.parse(localStorage.getItem("meus_matches") || "[]"));
 
-// Verifica se já está adicionado
+// Verifica se já tá no match
 const isInMatches = computed(() =>
   matches.value.some((m) => m.id === movie.value?.id)
 );
 
-// Adicionar ou remover dos matches
+// Adiciona/remove
 const toggleMatch = () => {
   if (!movie.value) return;
 
@@ -77,9 +87,10 @@ const toggleMatch = () => {
   localStorage.setItem("meus_matches", JSON.stringify(matches.value));
 };
 
+// Voltar
 const goBack = () => router.back();
 
-// Carregar filme
+// Buscar filme
 onMounted(async () => {
   try {
     const res = await axios.get(
@@ -96,7 +107,6 @@ onMounted(async () => {
 });
 </script>
 
-
 <style scoped>
 .movie-detail {
   padding: 40px 100px;
@@ -105,23 +115,57 @@ onMounted(async () => {
 }
 
 .btn-back {
-  margin-bottom: 20px;
+  margin-bottom: 40px;
   padding: 8px 16px;
-  background: #ff2d74;
+  background: #242424;
   border: none;
   color: white;
   border-radius: 6px;
   cursor: pointer;
+  transition: 0.3s ease-in-out;
+}
+.btn-back:hover {
+  background: #6a6a6a;
 }
 
 .movie-header {
   display: flex;
-  gap: 40px;
+  gap: 5rem;
+  margin: 0 30px;
 }
 
-.movie-header img {
+/* POSTER + GÊNEROS */
+.posterGenres {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 250px;
+}
+
+.posterGenres img {
+  width: 20rem;
   border-radius: 8px;
+}
+
+/* GÊNEROS */
+.genres {
+  margin-top: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.genre {
+  background-color: lch(55.04% 81.59 32.58);
+  padding: 5px 10px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+  font-size: 0.85rem;
+  white-space: nowrap;
 }
 
 .movie-info h1 {
@@ -131,25 +175,26 @@ onMounted(async () => {
 
 .movie-info span {
   color: #aaa;
+  font-weight: lighter;
+  font-style: italic;
 }
 
 .overview {
   margin: 20px 0;
+  font-size: 21px;
 }
 
-.genres {
+/* ⭐ NOTA COM ESTRELA */
+.rating {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
 }
-
-.genre {
-  background-color: #ff2d2d;
-  padding: 6px 12px;
-  border-radius: 6px;
-  text-decoration: none;
-  color: #fff;
-  font-weight: bold;
+.star {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
 }
 
 .btn-match {
