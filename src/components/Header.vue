@@ -33,6 +33,9 @@ import logo from '@/assets/logo.png'
   align-items: center;
   font-weight: bold;
 }
+.btn-primary:hover{
+  text-decoration: underline;
+}
 .btn-primary .icon {
   width: 20px;
   margin-right: 8px;

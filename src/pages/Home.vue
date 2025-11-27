@@ -1,8 +1,6 @@
 <template>
   <div class="home"> 
     <Header />
-
-    <!-- Hero -->
     <header class="hero" v-if="topMovie">
       <div class="mainText">
         <h1>Dê <span class="pink">match</span> com o filme <span class="pink">perfeito</span> para o seu momento!</h1>
@@ -14,7 +12,6 @@
       </div>
 
       <div class="header-movie">
-        <!-- Clicável: leva para detalhes do topMovie -->
         <router-link :to="`/movie/${topMovie.id}`">
           <img :src="`https://image.tmdb.org/t/p/w500${topMovie.poster_path}`" :alt="topMovie.title" />
           <h2>{{ topMovie.title }}</h2>
@@ -23,7 +20,6 @@
       </div>
     </header>
 
-    <!-- Grid de filmes -->
     <section class="popular">
       <h2>Grandes Matches do Momento 🎬</h2>
 
@@ -31,7 +27,6 @@
       <div v-else-if="error">{{ error }}</div>
       <div v-else class="movie-grid">
         <div v-for="movie in movies" :key="movie.id" class="movie-card">
-          <!-- Cada card clicável leva para /movie/:id -->
           <router-link :to="`/movie/${movie.id}`">
             <img :src="`https://image.tmdb.org/t/p/w500${movie.poster_path}`" :alt="movie.title"/>
             <p>{{ movie.title }}</p>
@@ -66,13 +61,9 @@ onMounted(async () => {
       }
     });
 
-    // Pega os 11 primeiros filmes
     const popular11 = response.data.results.slice(0, 11);
 
-    // Primeiro filme = hero
     topMovie.value = popular11[0];
-
-    // Próximos 10 = grid
     movies.value = popular11.slice(1);
 
   } catch (err) {
@@ -91,9 +82,9 @@ html, body {
   font-family: Arial, sans-serif;
 }
 
-/* Hero */
+
 .home {
-  padding-top: 90px; /* Espaço para o header fixo */
+  padding-top: 90px; 
 }
 .hero {
   padding: 40px 100px ;
@@ -111,7 +102,7 @@ html, body {
 }
 .mainText p {
   font-size: 1.5rem;
- width: 80%;
+  width: 80%;
   color: #BDBDBD;
   line-height: 2.3rem;
 }
@@ -152,11 +143,10 @@ html, body {
   justify-content: center;
 }
 
-/* Header movie */
 .header-movie {
-   display: flex;
-   width: 50%;
-   justify-content: center;
+  display: flex;
+  width: 50%;
+  justify-content: center;
 }
 .header-movie a {
   display: flex;
@@ -166,7 +156,8 @@ html, body {
 
 .header-movie img {
   border-radius: 8px;
-  height: 70%;
+  height:90%;
+  width: 90%;
 }
 
 .header-movie h2 {
@@ -176,7 +167,6 @@ html, body {
   font-size: 1.2rem;
   color: #BDBDBD;
 }
-/* Grid */
 .popular {
   padding:  40px 100px ;
   background-color: #212227;
@@ -202,6 +192,7 @@ html, body {
 
 .movie-card:hover {
   transform: scale(1.05);  /* efeito de zoom */
+  font-weight: bold;
 }
 
 .movie-card a {
@@ -224,8 +215,8 @@ html, body {
   color: #fff;
   margin-top: 6px;
 
-  display: -webkit-box;       /* permite truncamento multilinha */
-  -webkit-line-clamp: 2;      /* limita a 2 linhas */
+  display: -webkit-box;  
+  line-clamp: 2;    
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -233,7 +224,7 @@ html, body {
 }
 
 .movie-card:hover p {
-  -webkit-line-clamp: unset;  /* mostra título completo no hover */
+  
   white-space: normal;
 }
 
