@@ -1,6 +1,7 @@
 <template>
   <div class="home"> 
     <Header />
+
     <header class="hero" v-if="topMovie">
       <div class="mainText">
         <h1>Dê <span class="pink">match</span> com o filme <span class="pink">perfeito</span> para o seu momento!</h1>
@@ -19,7 +20,6 @@
         </router-link>
       </div>
     </header>
-
     <section class="popular">
       <h2>Grandes Matches do Momento 🎬</h2>
 
@@ -60,10 +60,13 @@ onMounted(async () => {
         page: 1
       }
     });
-
+    
     const popular11 = response.data.results.slice(0, 11);
 
+    
     topMovie.value = popular11[0];
+
+   
     movies.value = popular11.slice(1);
 
   } catch (err) {
@@ -85,10 +88,12 @@ html, body {
 
 .home {
   padding-top: 90px; 
+ 
 }
 .hero {
   padding: 40px 100px ;
   text-align: left;
+   max-height: 85vh;
   display: flex;
 }
 .mainText{
@@ -102,7 +107,7 @@ html, body {
 }
 .mainText p {
   font-size: 1.5rem;
-  width: 80%;
+ width: 80%;
   color: #BDBDBD;
   line-height: 2.3rem;
 }
@@ -144,9 +149,9 @@ html, body {
 }
 
 .header-movie {
-  display: flex;
-  width: 50%;
-  justify-content: center;
+   display: flex;
+   width: 50%;
+   justify-content: center;
 }
 .header-movie a {
   display: flex;
@@ -156,8 +161,8 @@ html, body {
 
 .header-movie img {
   border-radius: 8px;
-  height:90%;
-  width: 90%;
+  height: 80%;
+  width: 100%;
 }
 
 .header-movie h2 {
@@ -167,6 +172,7 @@ html, body {
   font-size: 1.2rem;
   color: #BDBDBD;
 }
+
 .popular {
   padding:  40px 100px ;
   background-color: #212227;
@@ -177,8 +183,8 @@ html, body {
 }
 .movie-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* Sempre 5 colunas */
-  grid-template-rows: repeat(2, auto);   /* Sempre 2 linhas */
+  grid-template-columns: repeat(5, 1fr); 
+  grid-template-rows: repeat(2, auto);  
   gap: 20px;
   margin-top: 20px;
 }
@@ -186,13 +192,12 @@ html, body {
 .movie-card {
   border-radius: 10px;
   overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease; /* animação suave */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; 
   cursor: pointer;
 }
 
 .movie-card:hover {
-  transform: scale(1.05);  /* efeito de zoom */
-  font-weight: bold;
+  transform: scale(1.05);  
 }
 
 .movie-card a {
@@ -215,8 +220,8 @@ html, body {
   color: #fff;
   margin-top: 6px;
 
-  display: -webkit-box;  
-  line-clamp: 2;    
+  display: -webkit-box;       
+  -webkit-line-clamp: 2;    
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -224,7 +229,7 @@ html, body {
 }
 
 .movie-card:hover p {
-  
+  -webkit-line-clamp: unset;   
   white-space: normal;
 }
 

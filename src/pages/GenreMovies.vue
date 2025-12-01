@@ -1,8 +1,10 @@
 <template>
   <div class="genre-movies popular">
+    <Header />
+
     <button class="btn-back" @click="goBack">← Voltar</button>
 
-    <h2> {{ genreName }}</h2>
+    <h2>{{ genreName }}</h2>
 
     <div v-if="loading">Carregando filmes...</div>
     <div v-else-if="error">{{ error }}</div>
@@ -15,11 +17,11 @@
         </router-link>
       </div>
     </div>
-
   </div>
 </template>
 
 <script setup>
+import Header from "../components/Header.vue";
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
@@ -32,29 +34,20 @@ const genreName = ref("");
 const loading = ref(true);
 const error = ref(null);
 
-const BEARER_TOKEN =
-  "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhY2VlNDkxZjA0M2ExODg2ZWNkNWI2ZTkzMDM1NjkzMCIsIm5iZiI6MTc1OTUwOTI5NS43MzgsInN1YiI6IjY4ZGZmYjJmYzIzZmRjZTE5YmI3N2VjOCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.NCkEvmJZlyl49UfX0fVSI76-Yk2dD9tDBKMV3ulA1SI";
+const BEARER_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhY2VlNDkxZjA0M2ExODg2ZWNkNWI2ZTkzMDM1NjkzMCIsIm5iZiI6MTc1OTUwOTI5NS43MzgsInN1YiI6IjY4ZGZmYjJmYzIzZmRjZTE5YmI3N2VjOCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.NCkEvmJZlyl49UfX0fVSI76-Yk2dD9tDBKMV3ulA1SI";
 
 const goBack = () => router.back();
 
 onMounted(async () => {
   try {
-    // Nome do gênero
     const genresResponse = await axios.get(
       "https://api.themoviedb.org/3/genre/movie/list",
-      {
-        headers: { Authorization: `Bearer ${BEARER_TOKEN}` },
-        params: { language: "pt-BR" }
-      }
+      { headers: { Authorization: `Bearer ${BEARER_TOKEN}` }, params: { language: "pt-BR" } }
     );
 
-    const genreObj = genresResponse.data.genres.find(
-      (g) => g.id == route.params.id
-    );
-
+    const genreObj = genresResponse.data.genres.find(g => g.id == route.params.id);
     genreName.value = genreObj ? genreObj.name : "Desconhecido";
 
-    // Filmes
     const response = await axios.get(
       "https://api.themoviedb.org/3/discover/movie",
       {
@@ -70,7 +63,7 @@ onMounted(async () => {
 
     movies.value = response.data.results;
   } catch (err) {
-    console.error("Erro ao carregar filmes do gênero:", err);
+    console.error(err);
     error.value = "Não foi possível carregar os filmes.";
   } finally {
     loading.value = false;
@@ -79,10 +72,8 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-
-/* PADRÃO DA SUA GRID */
 .popular {
-  padding: 40px 100px;
+  padding: 90px 100px 40px 100px;
 }
 
 .popular h2 {
@@ -90,11 +81,10 @@ onMounted(async () => {
   margin-bottom: 30px;
 }
 
-/* GRID IGUAL AO OUTRO COMPONENTE */
 .movie-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* 5 colunas fixas */
-  grid-template-rows: repeat(2, auto);   /* 2 linhas */
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(2, auto);
   gap: 20px;
   margin-top: 20px;
 }
@@ -129,9 +119,8 @@ onMounted(async () => {
   font-size: 1.2rem;
   color: #fff;
   margin-top: 6px;
-
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* título em 2 linhas */
+  -webkit-line-clamp: 2; 
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -139,11 +128,9 @@ onMounted(async () => {
 }
 
 .movie-card:hover p {
-  -webkit-line-clamp: unset; /* mostra o título inteiro no hover */
+  -webkit-line-clamp: unset; 
   white-space: normal;
 }
-
-/* VOLTAR */
 
 .btn-back {
   margin-bottom: 40px;
@@ -155,22 +142,20 @@ onMounted(async () => {
   cursor: pointer;
   transition: 0.3s ease-in-out;
 }
+
 .btn-back:hover {
   background: #6a6a6a;
 }
 
-/* DESKTOP → 5 COLUNAS */
 @media (min-width: 1200px) {
   .movie-grid {
     grid-template-columns: repeat(5, 1fr);
   }
 }
 
-/* TELAS GRANDES → 7 COLUNAS */
 @media (min-width: 1600px) {
   .movie-grid {
     grid-template-columns: repeat(7, 1fr);
   }
 }
-
 </style>

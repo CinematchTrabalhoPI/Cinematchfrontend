@@ -1,7 +1,13 @@
 <template>
   <header class="hero-header">
+    <router-link to="/">
       <img :src="logo" alt="Logo" class="logo">
-    <router-link to="/meus-matches" class="btn-primary"><img :src="ticket" alt="Ticket Icon" class="icon">Meus Matches</router-link>
+    </router-link>
+
+    <router-link to="/meus-matches" class="btn-primary">
+      <img :src="ticket" alt="Ticket Icon" class="icon">
+      Meus Matches
+    </router-link>
   </header>
 </template>
 
@@ -9,7 +15,6 @@
 import ticket from '@/assets/ticket.png'
 import logo from '@/assets/logo.png'
 </script>
-
 
 <style scoped>
 .hero-header {
@@ -25,17 +30,22 @@ import logo from '@/assets/logo.png'
   padding: 20px 100px;
   height: 70px;
 }
+
 .logo {
   height: 30px;
+  cursor: pointer; 
 }
+
 .btn-primary {
   display: flex;
   align-items: center;
   font-weight: bold;
 }
+
 .btn-primary:hover{
   text-decoration: underline;
 }
+
 .btn-primary .icon {
   width: 20px;
   margin-right: 8px;

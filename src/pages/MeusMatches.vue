@@ -1,5 +1,7 @@
 <template>
   <div class="matches-page popular">
+    <Header />
+
     <button class="btn-back" @click="goBack">← Voltar</button>
 
     <h1>Meus Matches ❤️</h1>
@@ -17,15 +19,20 @@
         <button class="btn-remove" @click="removeMatch(movie.id)">Remover</button>
       </div>
     </div>
+
+    <div v-if="showAlert" class="alert">{{ alertMessage }}</div>
   </div>
 </template>
 
 <script setup>
+import Header from "../components/Header.vue";
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 const matches = ref([]);
+const showAlert = ref(false);
+const alertMessage = ref("");
 
 onMounted(() => {
   matches.value = JSON.parse(localStorage.getItem("meus_matches") || "[]");
@@ -36,11 +43,16 @@ const goBack = () => router.back();
 const removeMatch = (id) => {
   matches.value = matches.value.filter(m => m.id !== id);
   localStorage.setItem("meus_matches", JSON.stringify(matches.value));
+
+  alertMessage.value = "Filme removido dos Matches!";
+  showAlert.value = true;
+  setTimeout(() => (showAlert.value = false), 2000);
 };
 </script>
+
 <style scoped>
 .popular {
-  padding: 40px 100px;
+  padding: 90px 100px 40px 100px;
 }
 
 .popular h1 {
@@ -48,7 +60,6 @@ const removeMatch = (id) => {
   margin-bottom: 30px;
 }
 
-/* Texto quando vazio */
 .empty {
   text-align: center;
   font-size: 1.1rem;
@@ -56,10 +67,9 @@ const removeMatch = (id) => {
   margin-top: 30px;
 }
 
-/* GRID */
 .movie-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* 5 colunas padrão */
+  grid-template-columns: repeat(5, 1fr);
   gap: 20px;
   margin-top: 20px;
 }
@@ -70,12 +80,12 @@ const removeMatch = (id) => {
   transition: transform 0.3s ease, padding-bottom 0.3s ease;
   cursor: pointer;
   position: relative;
-  padding-bottom: 12px; /* espaço para botão */
+  padding-bottom: 12px;
 }
 
 .movie-card:hover {
   transform: scale(1.05);
-  padding-bottom: 50px; /* aumenta espaço para botão aparecer */
+  padding-bottom: 50px;
 }
 
 .movie-card a {
@@ -98,7 +108,7 @@ const removeMatch = (id) => {
   color: #fff;
   margin-top: 6px;
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* título em 2 linhas */
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -106,11 +116,10 @@ const removeMatch = (id) => {
 }
 
 .movie-card:hover p {
-  -webkit-line-clamp: unset; /* mostra o título inteiro no hover */
+  -webkit-line-clamp: unset;
   white-space: normal;
 }
 
-/* Botão remover abaixo do título */
 .btn-remove {
   position: absolute;
   bottom: 12px;
@@ -135,14 +144,13 @@ const removeMatch = (id) => {
 .movie-card:hover .btn-remove {
   opacity: 1;
   pointer-events: auto;
-  background-size: 100% 100%; /* animação completa */
+  background-size: 100% 100%;
 }
 
 .btn-remove:hover {
   background: #d21f1f;
 }
 
-/* Botão voltar */
 .btn-back {
   margin-bottom: 40px;
   padding: 8px 16px;
@@ -158,36 +166,44 @@ const removeMatch = (id) => {
   background: #6a6a6a;
 }
 
-/* DESKTOP → 5 COLUNAS */
+.alert {
+  position: fixed;
+  top: 110px;
+  right: 20px;
+  background: #212020;
+  color: rgb(173, 173, 173);
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  z-index: 9999;
+  transition: all 0.8s ease-in-out;
+}
+
 @media (min-width: 1200px) {
   .movie-grid {
     grid-template-columns: repeat(5, 1fr);
   }
 }
 
-/* TELAS GRANDES → 7 COLUNAS */
 @media (min-width: 1600px) {
   .movie-grid {
     grid-template-columns: repeat(7, 1fr);
   }
 }
 
-/* TABLET */
 @media (max-width: 1024px) {
   .movie-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
-/* CELULAR */
 @media (max-width: 600px) {
   .movie-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
   .popular {
-    padding: 20px;
+    padding: 90px 20px 40px 20px;
   }
 }
-
 </style>
