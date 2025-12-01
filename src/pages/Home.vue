@@ -232,5 +232,11 @@ html, body {
   -webkit-line-clamp: unset;   
   white-space: normal;
 }
-
+@media (min-width: 1600px) {
+  .hero{
+    height: 70vh;
+    }
+.hero img{
+    height: 80%;
+}}
 </style>
