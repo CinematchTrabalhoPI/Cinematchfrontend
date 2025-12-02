@@ -229,7 +229,7 @@ html, body {
 }
 
 .movie-card:hover p {
-  -webkit-line-clamp: unset;   
+  line-clamp: unset;   
   white-space: normal;
 }
 @media (min-width: 1600px) {
@@ -238,5 +238,6 @@ html, body {
     }
 .hero img{
     height: 80%;
+    width: 18vw;
 }}
 </style>
